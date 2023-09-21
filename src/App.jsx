@@ -9,22 +9,23 @@ import HomePage from './components/Home'
 import Register from './components/Register';
 import Reset from './components/Reset';
 import Wrapper from './components/Wrapper';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-
-    <ApolloProvider client={client} >
-
+    < >
       <Routes>
         <Route path='/' element={<Wrapper />} />
         <Route path='/register' element={<Register />} />
         <Route path='/reset-password' element={<Reset />} />
         <Route path='/home' element={<HomePage />} />
       </Routes>
-    </ApolloProvider>
+    </>
   )
 }
 

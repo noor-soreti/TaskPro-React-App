@@ -1,23 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const GET_CURRENT_USER = gql`
-    query GetTasks {
+    query Query {
         currentUser
     }
 `
-
-export const LOGIN = gql`
-    query GetTasks($email: String!, $password: String!) {
-        loginUser(email: $email, password: $password) {
-        user {
-            email, password
-        }
-        }
-    }
-`
-
 export const GET_TASKS = gql`
-    query GetTasks {
+    query Query {
         getTasks {
             _id
             title
@@ -30,7 +19,7 @@ export const GET_TASKS = gql`
 `
 
 export const LOG_OUT = gql`
-    query GetTasks {
+    query Query {
         signOut
     }
 `
@@ -38,5 +27,6 @@ export const LOG_OUT = gql`
 export const TEST_QUERY = gql`
 query Query {
     testQuery
-  }
+}
 `
+

@@ -1,49 +1,28 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import Register from './Register';
 import React, { useState } from 'react';
-import { collection, addDoc, getDoc, getDocs, where } from "firebase/firestore";
 import { FormProvider, useForm } from 'react-hook-form'
-import { signIn, user, signOut } from '../../authentication'
 import { Input } from '../boilerplate/Input'
-import { db } from '../../firebase'
-import { useQuery, useMutation } from '@apollo/client';
-import { TEST_QUERY } from '../apollo/queries'
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../apollo/mutations'
 
-export default function Login({ setIsLoggedIn }) {
+
+export default function Login() {
     const methods = useForm()
-    const [loginInfo, setLoginInfo] = useState(false)
 
-    const { name: lastName } = "nems"
+    const [login, { error, reset }] = useMutation(LOGIN);
 
-
-    const { loading, error, data } = useQuery(TEST_QUERY)
 
 
     const onSubmit = methods.handleSubmit(async (e) => {
+        login({ variables: { email: e.email, password: e.password } })
 
-        // signOut()
-        // const signinUser = await signIn(e.email, e.password)
-        // console.log(signinUser);
-
-
-        // try {
-        //     const querySnapshot = await getDocs(collection(db, "users"));
-        //     querySnapshot.forEach((doc) => {
-        //         if (doc.data().email == e.email && doc.data().password == e.password) {
-        //             console.log("YES");
-        //             setIsLoggedIn(true)
-        //         } else {
-        //             setLoginInfo(true)
-        //         }
-        //     })
-        // } catch (e) {
-        // }
     })
+
     return (
         <div className='content ' >
             <FormProvider {...methods} >
                 <form onSubmit={e => e.preventDefault()} style={{ marginTop: '200px', backgroundColor: 'white', width: '50%', minWidth: '400px' }}>
-
                     <div className="mb-3 border rounded pt-4 pb-4 px-4">
                         <p style={{ textAlign: 'center' }}>Login</p>
                         <Input
@@ -61,7 +40,7 @@ export default function Login({ setIsLoggedIn }) {
                             validation={{ required: { value: true, message: 'Password required' } }}
                         />
                         <button className='' onClick={onSubmit} style={{ width: '100%' }}>Submit</button>
-                        {loginInfo && (<p>Whoops! Something went wrong</p>)}
+                        {error && (<p>Whoops! Something went wrong</p>)}
                     </div>
 
                 </form>

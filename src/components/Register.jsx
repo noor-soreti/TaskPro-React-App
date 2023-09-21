@@ -1,21 +1,22 @@
-import React, { useState } from 'react'
-import { collection, addDoc, getDoc, getDocs } from "firebase/firestore";
-import { db } from '../../firebase'
-import { doc, setDoc } from "firebase/firestore";
-
-import { createUser } from '../../authentication'
+import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form';
 import { Input } from '../boilerplate/Input';
-
+import { useMutation } from '@apollo/client';
+import { REGISTER_USER } from '../apollo/mutations'
 
 export default function Register() {
-
-
     const methods = useForm()
-    const onSubmit = methods.handleSubmit(async (e) => {
-        createUser(e.email, e.password)
-    })
 
+
+    const [register, { error, reset }] = useMutation(REGISTER_USER)
+
+    const onSubmit = methods.handleSubmit(async (e) => {
+        try {
+            await register({ variables: { email: e.email, password: e.password } })
+        } catch (e) {
+            console.log(e);
+        }
+    })
 
     return (
         <div className='content'>
@@ -28,30 +29,38 @@ export default function Register() {
                             type="text"
                             id="firstname"
                             placeholder="Type your first name"
-                            validation={{ required: { value: true, message: 'First name required' } }}
+                            validation={{ required: true }}
                         />
                         <Input
                             label="Last Name"
                             type="text"
                             id="lastname"
                             placeholder="Type your last name"
-                            validation={{ required: { value: true, message: 'Last name required' } }}
+                            validation={{ required: true }}
                         />
                         <Input
                             label="Email"
                             type="text"
                             id="email"
                             placeholder="Type your email"
-                            validation={{ required: { value: true, message: 'Email required' } }}
+                            validation={{ required: true }}
                         />
                         <Input
+
                             label="Password"
                             type="password"
                             id="password"
                             placeholder="Type your password"
-                            validation={{ required: { value: true, message: 'Password required',  } }}
+                            validation={{
+                                required: true, minLength: {
+                                    value: 6,
+                                    message: "Length must be 6 characters or more"
+                                },
+                            }}
                         />
                         <button onClick={onSubmit} style={{ width: '100%' }}>Register</button>
+                        {error && (<p>Email already in use</p>)}
+
                     </div>
                 </form>
             </FormProvider>

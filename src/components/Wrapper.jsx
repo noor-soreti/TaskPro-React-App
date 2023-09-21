@@ -1,23 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Login from './Login'
-import { signIn, user } from '../../authentication'
+import { useQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from '../apollo/queries'
+import Home from './Home';
+
+
+function TestQuery() {
+    const { loading, error, data } = useQuery(GET_CURRENT_USER);
+    if (loading) return 'Loading...';
+    if (error) return `Error! ${error.message}`;
+}
 
 
 export default function Wrapper() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [currentUser, setCurrentUser] = useState(user)
+    const { data } = useQuery(GET_CURRENT_USER);
 
-    // console.log(currentUser);
-
-    if (!isLoggedIn) {
+    if (!data?.currentUser) {
         return (
             <>
-                <Login setIsLoggedIn={setIsLoggedIn} />
+                <Login />
             </>
         )
     } else {
         return (
-            <div>Home</div>
+            <>
+                <Home />
+            </>
         )
     }
 }

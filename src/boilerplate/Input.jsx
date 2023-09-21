@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form"
 
 
-export const Input = ({ label, type, id, placeholder, validation }) => {
+export const Input = ({ label, type, id, placeholder, validation, change }) => {
     const {
         register,
-        formState: { errors } } = useFormContext()
+        formState: { errors, onChange } } = useFormContext()
 
     const iError = InputError(errors, id);
 
@@ -24,6 +24,8 @@ export const Input = ({ label, type, id, placeholder, validation }) => {
                     placeholder={placeholder}
                     aria-invalid={errors.id ? "true" : "false"}
                     style={{ border: 'none', borderBottom: '1rem', backgroundColor: ' #F6F5F5' }}
+                    
+
                 />
             </div>
             <p>{iError.error?.message}</p>
